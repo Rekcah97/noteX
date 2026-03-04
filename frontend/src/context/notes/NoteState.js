@@ -7,10 +7,12 @@ const NoteState = (props) => {
 
   // get all notes
   const getAllNote = async () => {
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${host}/api/notes/fetchallnotes`, {
       method: "GET",
       headers: {
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
     });
     const json = await response.json();
@@ -19,29 +21,31 @@ const NoteState = (props) => {
 
   // add a note
   const addNote = async (title, description, tag) => {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${host}/api/notes/addnotes`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ title, description, tag }),
     });
-    const note = response.json();
+    const note = await response.json();
 
     setNotes(notes.concat(note));
     getAllNote();
   };
   //delete a note
   const deleteNote = async (id) => {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
     });
-    const json = response.json();
+    const json = await response.json();
     console.log(json);
 
     console.log(id);
@@ -52,16 +56,16 @@ const NoteState = (props) => {
   };
   // edit a note
   const editNote = async (id, title, description, tag) => {
+    const token = localStorage.getItem("token");
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",
-        "auth-token": localStorage.getItem("token"),
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ title, description, tag }),
     });
     const json = await response.json();
-    console.log(json);
 
     let newNotes = JSON.parse(JSON.stringify(notes));
 
@@ -79,7 +83,13 @@ const NoteState = (props) => {
 
   const [notes, setNotes] = useState(notesInitial);
 
-  return <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getAllNote }}>{props.children}</NoteContext.Provider>;
+  return (
+    <NoteContext.Provider
+      value={{ notes, addNote, deleteNote, editNote, getAllNote }}
+    >
+      {props.children}
+    </NoteContext.Provider>
+  );
 };
 
 export default NoteState;

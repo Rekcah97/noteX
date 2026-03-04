@@ -21,5 +21,8 @@ const UserOTPVerificationSchema = new Schema({
     required: true,
   },
 });
-const UserOTPVerification = mongoose.model("UserOTPVerification", UserOTPVerificationSchema);
+const UserOTPVerification = mongoose.model(
+  "UserOTPVerification",
+  UserOTPVerificationSchema,
+);
 module.exports = UserOTPVerification;

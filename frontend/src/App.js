@@ -14,7 +14,6 @@ import VerifyEmail from "./components/VerifyEmail";
 
 function App() {
   const [alert, setAlert] = useState(null);
-  // const [confirm, setConfirm] = useState(null);
 
   const showAlert = (message, type) => {
     setAlert({
@@ -26,13 +25,6 @@ function App() {
     }, 1500);
   };
 
-  // const showConfirm = (title, action, click) => {
-  //   setConfirm({
-  //     title: title,
-  //     action: action,
-  //     click: click,
-  //   });
-  // };
   return (
     <>
       <NoteState>

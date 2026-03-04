@@ -55,12 +55,15 @@ const VerifyEmail = (props) => {
     }
 
     try {
+      const token = localStorage.getItem("token");
+      console.log(token);
       const response = await fetch("http://localhost:5000/api/auth/verifyOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId, otp }),
+        body: JSON.stringify({ otp }),
       });
       const json = await response.json();
 
@@ -94,12 +97,14 @@ const VerifyEmail = (props) => {
     }
 
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch("http://localhost:5000/api/auth/resendOTP", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId, email }),
+        body: JSON.stringify({ email }),
       });
       const json = await response.json();
 
@@ -111,7 +116,10 @@ const VerifyEmail = (props) => {
         setTimer(60); // Set timer for 1 minute (60 seconds)
         showAlert("Verification code was resent", "success");
       } else {
-        showAlert(json.message || "An error occurred while resending the code", "danger");
+        showAlert(
+          json.message || "An error occurred while resending the code",
+          "danger",
+        );
       }
     } catch (error) {
       console.error("Error resending OTP:", error);
@@ -131,11 +139,27 @@ const VerifyEmail = (props) => {
             <label htmlFor="otp" className="mt-3">
               <b>Code</b>
             </label>
-            <input type="text" placeholder="Enter the verification code" value={Credential.otp} onChange={onChange} name="otp" id="otp" aria-describedby="nameotp" required className="ainput" minLength={4} maxLength={4} />
+            <input
+              type="text"
+              placeholder="Enter the verification code"
+              value={Credential.otp}
+              onChange={onChange}
+              name="otp"
+              id="otp"
+              aria-describedby="nameotp"
+              required
+              className="ainput"
+              minLength={4}
+              maxLength={4}
+            />
           </div>
           <p className="my-3">
             Didn't receive a verification code?{" "}
-            <button onClick={handleResend} className="link" disabled={isResendDisabled}>
+            <button
+              onClick={handleResend}
+              className="link"
+              disabled={isResendDisabled}
+            >
               {isResendDisabled ? `Resend (${timer}s)` : "Resend"}
             </button>
           </p>
