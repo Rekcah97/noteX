@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 const VerifyEmail = (props) => {
+  const host = process.env.REACT_APP_BACKEND_URL;
   let history = useHistory();
   const { showAlert } = props;
   const [Credential, setCredential] = useState({ otp: "" });
@@ -57,7 +58,7 @@ const VerifyEmail = (props) => {
     try {
       const token = localStorage.getItem("token");
       console.log(token);
-      const response = await fetch("http://localhost:5000/api/auth/verifyOTP", {
+      const response = await fetch(`${host}/api/auth/verifyOTP`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ const VerifyEmail = (props) => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5000/api/auth/resendOTP", {
+      const response = await fetch(`${host}/api/auth/resendOTP`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

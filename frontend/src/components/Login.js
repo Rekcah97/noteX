@@ -3,17 +3,21 @@ import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Login = (props) => {
+  const host = process.env.REACT_APP_BACKEND_URL;
   const { showAlert } = props;
   let history = useHistory();
   const [Credential, setCredential] = useState({ email: "", password: "" });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+    const response = await fetch(`${host}/api/auth/login`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({ email: Credential.email.toLowerCase(), password: Credential.password }),
+      body: JSON.stringify({
+        email: Credential.email.toLowerCase(),
+        password: Credential.password,
+      }),
     });
     const json = await response.json();
     console.log(json.success, json.auth);
@@ -42,15 +46,35 @@ const Login = (props) => {
               <b>Email</b>
             </label>
 
-            <input type="email" placeholder="Enter Email" name="email" value={Credential.email} id="email" onChange={onChange} aria-describedby="emailHelp" required className="ainput" />
+            <input
+              type="email"
+              placeholder="Enter Email"
+              name="email"
+              value={Credential.email}
+              id="email"
+              onChange={onChange}
+              aria-describedby="emailHelp"
+              required
+              className="ainput"
+            />
 
             <label htmlFor="password">
               <b>Password</b>
             </label>
-            <input type="password" placeholder="Enter Password" name="password" value={Credential.password} onChange={onChange} id="password" className="ainput mb-3" required />
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="password"
+              value={Credential.password}
+              onChange={onChange}
+              id="password"
+              className="ainput mb-3"
+              required
+            />
           </div>
           <p className="my-3 ">
-            By Logging in your account you agree to our <NavLink to="/termprivacy">Terms & Privacy</NavLink>.
+            By Logging in your account you agree to our{" "}
+            <NavLink to="/termprivacy">Terms & Privacy</NavLink>.
           </p>
 
           <button type="submit" className="registerbtn">

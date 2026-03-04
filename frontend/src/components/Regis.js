@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 const Regis = (props) => {
+  const host = process.env.REACT_APP_BACKEND_URL;
   const { showAlert } = props;
   let history = useHistory();
-  const [Credential, setCredential] = useState({ name: "", email: "", password: "", conpassword: "" });
+  const [Credential, setCredential] = useState({
+    name: "",
+    email: "",
+    password: "",
+    conpassword: "",
+  });
   const handleSubmit = async (e) => {
     const { name, email, password, conpassword } = Credential;
     e.preventDefault();
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+    const response = await fetch(`${host}/api/auth/createuser`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -50,25 +56,66 @@ const Regis = (props) => {
               <b>Name</b>
             </label>
 
-            <input type="text" placeholder="Enter Your Full Name " name="name" value={Credential.name} id="name" onChange={onChange} aria-describedby="nameHelp" required className="ainput" />
+            <input
+              type="text"
+              placeholder="Enter Your Full Name "
+              name="name"
+              value={Credential.name}
+              id="name"
+              onChange={onChange}
+              aria-describedby="nameHelp"
+              required
+              className="ainput"
+            />
 
             <label htmlFor="email">
               <b>Email</b>
             </label>
 
-            <input type="email" placeholder="Enter Email" name="email" value={Credential.email} id="email" onChange={onChange} aria-describedby="emailHelp" required className="ainput" />
+            <input
+              type="email"
+              placeholder="Enter Email"
+              name="email"
+              value={Credential.email}
+              id="email"
+              onChange={onChange}
+              aria-describedby="emailHelp"
+              required
+              className="ainput"
+            />
 
             <label htmlFor="password">
               <b>Password</b>
             </label>
-            <input type="password" placeholder="Enter Password" name="password" value={Credential.password} onChange={onChange} id="password" className="ainput mb-3" minLength={5} required />
+            <input
+              type="password"
+              placeholder="Enter Password"
+              name="password"
+              value={Credential.password}
+              onChange={onChange}
+              id="password"
+              className="ainput mb-3"
+              minLength={5}
+              required
+            />
             <label htmlFor="conpassword">
               <b>Confirm Password</b>
             </label>
-            <input type="password" placeholder="Re-enter Password" name="conpassword" value={Credential.conpassword} onChange={onChange} id="conpassword" className="ainput mb-3" minLength={5} required />
+            <input
+              type="password"
+              placeholder="Re-enter Password"
+              name="conpassword"
+              value={Credential.conpassword}
+              onChange={onChange}
+              id="conpassword"
+              className="ainput mb-3"
+              minLength={5}
+              required
+            />
           </div>
           <p className="my-3 ">
-            By Registering your Account you Agree to our <NavLink to="/termprivacy">Terms & Privacy</NavLink>.
+            By Registering your Account you Agree to our{" "}
+            <NavLink to="/termprivacy">Terms & Privacy</NavLink>.
           </p>
 
           <button type="submit" className="registerbtn">
