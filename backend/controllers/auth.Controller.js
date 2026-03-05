@@ -185,8 +185,6 @@ const resentVerificationOtp = async (req, res) => {
     const userId = req.user.id;
     const { email } = req.body;
 
-    console.log(userId, email);
-
     if (!userId || !email) {
       throw Error("Empty user details are not allowed");
     }
@@ -204,6 +202,8 @@ const resentVerificationOtp = async (req, res) => {
     await UserOTPVerification.deleteMany({ userId });
 
     await sendOTPVerificationEmail({ _id: userId, email });
+
+    console.log("running resend verification route");
 
     res.json({
       status: "sent",

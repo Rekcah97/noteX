@@ -14,6 +14,11 @@ const Regis = (props) => {
   const handleSubmit = async (e) => {
     const { name, email, password, conpassword } = Credential;
     e.preventDefault();
+
+    if (conpassword !== password) {
+      showAlert("Confirm password doesn't match", "danger");
+      return;
+    }
     const response = await fetch(`${host}/api/auth/createuser`, {
       method: "POST",
       headers: {
@@ -22,21 +27,17 @@ const Regis = (props) => {
       body: JSON.stringify({ name, email: email.toLowerCase(), password }),
     });
     const json = await response.json();
-    console.log(json);
-    if (conpassword === password)
-      if (json.success) {
-        localStorage.setItem("token", json.auth);
-        localStorage.setItem("name", Credential.name);
-        localStorage.setItem("userId", json.userId);
-        localStorage.setItem("userEmail", json.userEmail);
+    console.log("SIGNUP RESPONSE:", json);
 
-        history.push("/verifyemail");
-        showAlert("Your Account was created Successfully", "success");
-      } else {
-        showAlert("user with this email already exists.", "danger");
-      }
-    else {
-      showAlert("Confirm password doesnt match", "danger");
+    if (json.success) {
+      localStorage.setItem("token", json.auth);
+      localStorage.setItem("name", Credential.name);
+      localStorage.setItem("verifiedStatus", "false");
+
+      history.push("/verifyemail");
+      showAlert("Your Account was created Successfully", "success");
+    } else {
+      showAlert("user with this email already exists.", "danger");
     }
   };
 

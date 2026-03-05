@@ -31,6 +31,9 @@ const sendOTPVerificationEmail = async ({ _id, email }) => {
     });
 
     await transporter.sendMail(mailOptions);
+
+    console.log("running sendOTPVerificationEmail");
+
     return {
       status: "pending",
       message: "Verification Code Sent",

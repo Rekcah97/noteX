@@ -71,6 +71,7 @@ const VerifyEmail = (props) => {
         body: JSON.stringify({ otp }),
       });
       const json = await response.json();
+      console.log("verifyenmail RESPONSE:", json);
 
       if (json.status === "verified") {
         history.push("/");
