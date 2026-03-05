@@ -3,11 +3,11 @@ const bcrypt = require("bcryptjs");
 const UserOTPVerification = require("../models/UserOTPVerification.js");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
+  port: 587,
   auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_APP_PASS,
+    user: process.env.MAILER_USER, // your brevo account email
+    pass: process.env.MAILER_APP_PASS, // brevo SMTP key (not account password)
   },
 });
 
@@ -15,11 +15,12 @@ const sendOTPVerificationEmail = async ({ _id, email }) => {
   try {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const mailOptions = {
-      from: process.env.USER,
+      from: process.env.MAILER_USER,
       to: email,
       subject: "Verify Your Email",
-      html: `<p>Enter <b>${otp}</b> in the Node-X application to verify your Email Address And complete the verification process.</p><p>The OTP will expire in <b>1 Hour</b>.</p>`,
+      html: `<p>Enter <b>${otp}</b> in the NoteX application to verify your Email Address and complete the verification process.</p><p>The OTP will expire in <b>1 Hour</b>.</p>`,
     };
+
     const saltRounds = await bcrypt.genSalt(10);
     let hashedOTP = await bcrypt.hash(otp, saltRounds);
 
@@ -31,18 +32,15 @@ const sendOTPVerificationEmail = async ({ _id, email }) => {
     });
 
     await transporter.sendMail(mailOptions);
-
-    console.log("running sendOTPVerificationEmail");
+    console.log("OTP email sent successfully");
 
     return {
       status: "pending",
       message: "Verification Code Sent",
-      data: {
-        userId: _id,
-        email,
-      },
+      data: { userId: _id, email },
     };
   } catch (error) {
+    console.error("Email sending failed:", error.message);
     return {
       status: "failed",
       message: error.message,
