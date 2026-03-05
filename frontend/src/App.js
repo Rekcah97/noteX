@@ -24,6 +24,8 @@ function App() {
       setAlert(null);
     }, 1500);
   };
+  // In App.js temporarily
+  console.log("Backend URL:", process.env.REACT_APP_BACKEND_URL);
 
   return (
     <>

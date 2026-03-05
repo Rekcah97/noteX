@@ -13,9 +13,18 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // needed for res
-app.use(cors());
+
 app.use(express.json());
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://notex-mola.onrender.com", // Add your actual frontend URL
+    ],
+    credentials: true,
+  }),
+);
 // Available Routes
 app.use("/api", routes);
 
