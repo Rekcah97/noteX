@@ -28,7 +28,7 @@ const Notes = (props) => {
     if (localStorage.getItem("token")) {
       if (localStorage.getItem("verifiedStatus") === "verified") {
         getAllNote();
-      } else if (verifiedStatus === "false") {
+      } else if (localStorage.getItem("verifiedStatus") === "false") {
         history.push("/verifyemail");
         showAlert("Email not verified", "danger");
       } else {
