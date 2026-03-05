@@ -3,11 +3,10 @@ const bcrypt = require("bcryptjs");
 const UserOTPVerification = require("../models/UserOTPVerification.js");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
+  service: "gmail",
   auth: {
-    user: process.env.MAILER_USER, // your brevo account email
-    pass: process.env.MAILER_APP_PASS, // brevo SMTP key (not account password)
+    user: process.env.MAILER_USER,
+    pass: process.env.MAILER_APP_PASS, // 16 char app password from Google
   },
 });
 

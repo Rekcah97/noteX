@@ -185,10 +185,13 @@ const resentVerificationOtp = async (req, res) => {
     const userId = req.user.id;
     const { email } = req.body;
 
+    console.log(userId);
+
     if (!userId || !email) {
       throw Error("Empty user details are not allowed");
     }
     const user = await User.findById(userId);
+    console.log(user);
 
     const verificationStatus = user.verified;
 

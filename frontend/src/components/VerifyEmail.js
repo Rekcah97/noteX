@@ -47,11 +47,11 @@ const VerifyEmail = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { otp } = Credential;
-    const userId = localStorage.getItem("userId");
 
-    if (!userId) {
-      showAlert("User ID not found. Please log in again.", "danger");
+    const { otp } = Credential;
+
+    if (!otp) {
+      showAlert("otp not found.Please type otp", "danger");
       return;
     }
 
@@ -94,11 +94,11 @@ const VerifyEmail = (props) => {
 
   const handleResend = async (e) => {
     e.preventDefault();
-    const userId = localStorage.getItem("userId");
+
     const email = localStorage.getItem("userEmail");
 
-    if (!userId || !email) {
-      showAlert("User ID or email not found. Please log in again.", "danger");
+    if (!email) {
+      showAlert("email not found. Please log in again.", "danger");
       return;
     }
 

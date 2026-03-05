@@ -32,6 +32,7 @@ const Regis = (props) => {
     if (json.success) {
       localStorage.setItem("token", json.auth);
       localStorage.setItem("name", Credential.name);
+      localStorage.setItem("userEmail", email.toLowerCase());
       localStorage.setItem("verifiedStatus", "false");
 
       history.push("/verifyemail");
