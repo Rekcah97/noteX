@@ -25,10 +25,11 @@ const Login = (props) => {
     if (json.success) {
       localStorage.setItem("token", json.auth);
       localStorage.setItem("name", json.name);
-      if (json.isVerified === "true") {
-        localStorage.removeItem("verifiedStatus");
-        localStorage.setItem("verifiedStatus", "verified");
-      }
+
+      localStorage.setItem(
+        "verifiedStatus",
+        json.isVerified ? "verified" : "false",
+      );
       history.push("/");
       showAlert("Succesfully logged in", "success");
     } else {

@@ -24,9 +24,13 @@ const Notes = (props) => {
 
   // using it as component did mount
   useEffect(() => {
+    console.log(localStorage.getItem("verifiedStatus"));
     if (localStorage.getItem("token")) {
       if (localStorage.getItem("verifiedStatus") === "verified") {
         getAllNote();
+      } else if (verifiedStatus === "false") {
+        history.push("/verifyemail");
+        showAlert("Email not verified", "danger");
       } else {
         checkVerifiedStatus();
       }
@@ -51,10 +55,11 @@ const Notes = (props) => {
       });
       const json = await response.json();
 
-      if (json.isVerified) {
+      if (json.verified) {
         localStorage.setItem("verifiedStatus", "verified"); // ✅ set it for future
         getAllNote();
       } else {
+        localStorage.setItem("verifiedStatus", "false");
         history.push("/verifyemail");
         showAlert("Email not verified", "danger");
       }
