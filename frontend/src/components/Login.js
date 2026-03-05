@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const Login = (props) => {
   const host = process.env.REACT_APP_BACKEND_URL;
-  console.log("HOST:", host); // 👈 what does this print?
+
   const { showAlert } = props;
   let history = useHistory();
   const [Credential, setCredential] = useState({ email: "", password: "" });

@@ -41,6 +41,7 @@ const Notes = (props) => {
 
   const checkVerifiedStatus = async () => {
     try {
+      const host = process.env.REACT_APP_BACKEND_URL;
       const token = localStorage.getItem("token");
       const response = await fetch(`${host}/api/auth/getuser`, {
         method: "GET",
