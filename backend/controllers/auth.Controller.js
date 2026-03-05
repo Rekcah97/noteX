@@ -185,6 +185,16 @@ const resentVerificationOtp = async (req, res) => {
     if (!userId || !email) {
       throw Error("Empty user details are not allowed");
     }
+    const user = await User.findById(userId);
+
+    const verificationStatus = user.verified;
+
+    if (verificationStatus) {
+      res.json({
+        status: "failed",
+        msg: "user is already verified",
+      });
+    }
 
     await UserOTPVerification.deleteMany({ userId });
 

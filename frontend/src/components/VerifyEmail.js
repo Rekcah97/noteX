@@ -57,7 +57,11 @@ const VerifyEmail = (props) => {
 
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
+
+      if (!token) {
+        showAlert("Please log in again.", "danger");
+        return;
+      }
       const response = await fetch(`${host}/api/auth/verifyOTP`, {
         method: "POST",
         headers: {
