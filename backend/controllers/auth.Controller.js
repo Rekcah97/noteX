@@ -110,7 +110,12 @@ const userLogin = async (req, res) => {
     const authtoken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
     success = true;
 
-    res.json({ success, auth: authtoken, name: user.name });
+    res.json({
+      success,
+      auth: authtoken,
+      name: user.name,
+      isVerified: user.verified,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server occurred");

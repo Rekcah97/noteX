@@ -21,10 +21,14 @@ const Login = (props) => {
       }),
     });
     const json = await response.json();
-    console.log(json.success, json.auth);
+    console.log(json);
     if (json.success) {
       localStorage.setItem("token", json.auth);
       localStorage.setItem("name", json.name);
+      if (json.isVerified === "true") {
+        localStorage.removeItem("verifiedStatus");
+        localStorage.setItem("verifiedStatus", "verified");
+      }
       history.push("/");
       showAlert("Succesfully logged in", "success");
     } else {
