@@ -6,6 +6,7 @@ const express = require("express");
 var cors = require("cors");
 
 const routes = require("./routes/index.Routes.js");
+const cleanupExpiredOTP = require("./jobs/cleanupExpiredOTP.jobs.js");
 
 //connecting with database
 connectToMongo();
@@ -34,3 +35,10 @@ app.use("/api", routes);
 app.listen(port, () => {
   console.log(`NoteX backend listening at http://localhost:${port}`);
 });
+
+//clean up job
+(async () => {
+  await cleanupExpiredOTP();
+  const timeFor30min = 30 * 60 * 1000;
+  setInterval(cleanupExpiredOTP, timeFor30min);
+})();
