@@ -1,24 +1,12 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const bcrypt = require("bcryptjs");
 const UserOTPVerification = require("../models/UserOTPVerification.js");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.MAILER_USER,
-    pass: process.env.MAILER_APP_PASS, // 16 char app password from Google
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOTPVerificationEmail = async ({ _id, email }) => {
   try {
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
-    const mailOptions = {
-      from: process.env.MAILER_USER,
-      to: email,
-      subject: "Verify Your Email",
-      html: `<p>Enter <b>${otp}</b> in the NoteX application to verify your Email Address and complete the verification process.</p><p>The OTP will expire in <b>1 Hour</b>.</p>`,
-    };
 
     const saltRounds = await bcrypt.genSalt(10);
     let hashedOTP = await bcrypt.hash(otp, saltRounds);
@@ -30,7 +18,13 @@ const sendOTPVerificationEmail = async ({ _id, email }) => {
       expiresAt: Date.now() + 3600000,
     });
 
-    await transporter.sendMail(mailOptions);
+    await resend.emails.send({
+      from: "noreply@arpitregmi.com.np",
+      to: email,
+      subject: "Verify Your Email",
+      html: `<p>Enter <b>${otp}</b> in the NoteX application to verify your Email Address and complete the verification process.</p><p>The OTP will expire in <b>1 Hour</b>.</p>`,
+    });
+
     console.log("OTP email sent successfully");
 
     return {

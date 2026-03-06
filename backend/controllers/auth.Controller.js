@@ -7,6 +7,7 @@ const UserOTPVerification = require("../models/UserOTPVerification.js");
 
 // Route 1 - Create User
 const createUser = async (req, res) => {
+  console.log("signup route was hit");
   let success = false;
   const errors = validationResult(req);
 
@@ -61,6 +62,7 @@ const createUser = async (req, res) => {
     const authToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
 
     success = true;
+    console.log("running singup route ");
     return res.json({
       success,
       auth: authToken,
@@ -78,6 +80,8 @@ const createUser = async (req, res) => {
 
 // Route 2 - Login
 const userLogin = async (req, res) => {
+  console.log("login route was hit");
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -109,7 +113,7 @@ const userLogin = async (req, res) => {
 
     const authtoken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
     success = true;
-
+    console.log("running login in route");
     res.json({
       success,
       auth: authtoken,
@@ -125,8 +129,10 @@ const userLogin = async (req, res) => {
 // Route 3 - Fetch User
 const fetchUser = async (req, res) => {
   try {
+    console.log(" user fetch was hit");
     const userId = req.user.id; // ❗ removed Number()
     const user = await User.findById(userId).select("-password");
+    console.log(" user fetch was hit");
     res.send(user);
   } catch (error) {
     console.error(error.message);
@@ -137,6 +143,7 @@ const fetchUser = async (req, res) => {
 // Route 4 - Verify Email
 const verifyEmail = async (req, res) => {
   try {
+    console.log(" verify email route was hit");
     const userId = req.user.id;
     const { otp } = req.body;
 
@@ -167,6 +174,7 @@ const verifyEmail = async (req, res) => {
     await User.updateOne({ _id: userId }, { verified: true });
     await UserOTPVerification.deleteMany({ userId });
 
+    console.log("running verify email route");
     res.json({
       status: "verified",
       message: "User email verified successfully",
@@ -182,16 +190,14 @@ const verifyEmail = async (req, res) => {
 // Route 5 - Resend OTP
 const resentVerificationOtp = async (req, res) => {
   try {
+    console.log("resend verification route was hit");
     const userId = req.user.id;
     const { email } = req.body;
-
-    console.log(userId);
 
     if (!userId || !email) {
       throw Error("Empty user details are not allowed");
     }
     const user = await User.findById(userId);
-    console.log(user);
 
     const verificationStatus = user.verified;
 
