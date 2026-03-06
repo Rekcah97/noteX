@@ -9,4 +9,14 @@ router.use("/auth", authRoutes);
 //Route 2
 router.use("/notes", noteRoutes);
 
+//Route 3
+router.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+    msg: "up",
+  });
+});
+
 module.exports = router;
